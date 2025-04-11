@@ -7,8 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RespondWithEncodings(ctx *gin.Context, encodings []EncodingInfo) {
-	ctx.IndentedJSON(http.StatusOK, EncodingResponse{encodings})
+func RespondWithEncodings(ctx *gin.Context, encodings []EncodedFile) {
+	ctx.IndentedJSON(http.StatusOK, GetFaceEncodingsResponse{encodings})
 }
 
 // Errors

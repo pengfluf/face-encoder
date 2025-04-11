@@ -15,7 +15,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func getFaceEncodings(ctx *gin.Context) {
+func GetFaceEncodings(ctx *gin.Context) {
 	form, err := ctx.MultipartForm()
 
 	if err != nil {
@@ -41,109 +41,125 @@ func getFaceEncodings(ctx *gin.Context) {
 		return
 	}
 
-	result := []EncodingInfo{}
+	// waitGroup := sync.WaitGroup{}
+	encodedFiles := []EncodedFile{}
+	limiter := make(chan string, MaxConcurrency)
 
 	for _, fileHeader := range fileHeaders {
-		fileName := filepath.Base((fileHeader.Filename))
-		isImage := GetIsImage(fileName)
+		// waitGroup.Add(1)
 
-		if !isImage {
-			RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
-				"Only %s files are allowed. \"%s\" doesn't meet this criteria.",
-				strings.Join(ImageFormats.List(), ", "), fileName,
-			))
-			return
-		}
+		limiter <- ""
 
-		fileSize := BytesToMBs(fileHeader.Size)
+		go func() {
+			defer func() { <-limiter }()
 
-		log.Print("File size: ", fileSize)
+			fileName := filepath.Base((fileHeader.Filename))
+			isImage := GetIsImage(fileName)
 
-		if fileSize > MaxFileSizeMB {
-			RespondWithBadRequest(ctx, fmt.Sprintf(
-				"Max file size is %sMB, the size of \"%s\" is %sMB.",
-				strconv.Itoa(MaxFileSizeMB), fileName,
-				strconv.FormatFloat(fileSize, 'g', -1, 64),
-			))
-			return
-		}
+			if !isImage {
+				RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
+					"Only %s files are allowed. \"%s\" doesn't meet this criteria.",
+					strings.Join(ImageFormats.List(), ", "), fileName,
+				))
+				return
+			}
 
-		file, err := fileHeader.Open()
+			fileSizeMB := BytesToMBs(fileHeader.Size)
 
-		if err != nil {
-			RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
-				"Failed to open \"%s\" file.", fileName,
-			))
-			return
-		}
+			log.Print("File size: ", fileSizeMB)
 
-		// log.Print("File is: ", file)
+			if fileSizeMB > MaxFileSizeMB {
+				RespondWithBadRequest(ctx, fmt.Sprintf(
+					"Max file size is %sMB, the size of \"%s\" is %sMB.",
+					strconv.Itoa(MaxFileSizeMB), fileName,
+					strconv.FormatFloat(fileSizeMB, 'g', -1, 64),
+				))
+				return
+			}
 
-		fileContents, err := io.ReadAll(file)
+			file, err := fileHeader.Open()
 
-		if err != nil {
-			RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
-				"Failed to read \"%s\" file contents.", fileName,
-			))
-			return
-		}
+			if err != nil {
+				RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
+					"Failed to open \"%s\" file.", fileName,
+				))
+				return
+			}
 
-		defer file.Close()
+			// log.Print("File is: ", file)
 
-		// bufferedReader := bufio.NewReader(file)
-		requestBody := &bytes.Buffer{}
-		writer := multipart.NewWriter(requestBody)
-		fileField, err := writer.CreateFormFile("file", fileName)
+			fileContents, err := io.ReadAll(file)
 
-		if err != nil {
-			RespondWithBadGateway(ctx, "Failed to create file field.")
-			return
-		}
+			if err != nil {
+				RespondWithUnprocessableEntity(ctx, fmt.Sprintf(
+					"Failed to read \"%s\" file contents.", fileName,
+				))
+				return
+			}
 
-		fileField.Write(fileContents)
+			defer file.Close()
 
-		writer.Close()
+			// bufferedReader := bufio.NewReader(file)
+			requestBody := &bytes.Buffer{}
+			writer := multipart.NewWriter(requestBody)
+			fileField, err := writer.CreateFormFile("file", fileName)
 
-		// log.Print("Request body: ", requestBody)
+			if err != nil {
+				RespondWithBadGateway(ctx, "Failed to create file field.")
+				return
+			}
 
-		encodingsResponse, err := http.Post(
-			"http://localhost:8000/v1/selfie",
-			writer.FormDataContentType(),
-			requestBody,
-		)
+			fileField.Write(fileContents)
 
-		// log.Print("Encodings Response: ", encodingsResponse)
+			defer writer.Close()
 
-		if err != nil {
-			RespondWithBadGateway(
-				ctx,
-				fmt.Sprintf("Failed to fetch face encodings. %s", err.Error()),
+			// log.Print("Request body: ", requestBody)
+
+			encodingsResponse, err := http.Post(
+				"http://localhost:8000/v1/selfie",
+				writer.FormDataContentType(),
+				requestBody,
 			)
-			return
-		}
 
-		encodings := Encodings{}
-		if err := json.NewDecoder(encodingsResponse.Body).Decode(&encodings); err != nil {
-			log.Fatalf("Failed to read response body: %v", err)
-		}
+			// log.Print("Encodings Response: ", encodingsResponse)
 
-		defer encodingsResponse.Body.Close()
+			if err != nil {
+				RespondWithBadGateway(
+					ctx,
+					fmt.Sprintf("Failed to fetch face encodings. %s", err.Error()),
+				)
+				return
+			}
 
-		// log.Print("Data: ", encodings)
+			encodings := Encodings{}
+			if err := json.NewDecoder(encodingsResponse.Body).Decode(&encodings); err != nil {
+				log.Fatalf("Failed to read response body: %v", err)
+			}
 
-		result = append(result, EncodingInfo{fileName, encodings})
+			defer encodingsResponse.Body.Close()
+
+			// log.Print("Data: ", encodings)
+
+			encodedFiles = append(encodedFiles, EncodedFile{
+				name:      fileName,
+				sizeMB:    fileSizeMB,
+				encodings: encodings,
+			})
+		}()
 	}
 
-	// log.Print("Result", result)
+	for range cap(limiter) {
+		limiter <- ""
+	}
 
-	RespondWithEncodings(ctx, result)
+	RespondWithEncodings(ctx, encodedFiles)
 }
 
 func main() {
 	router := gin.Default()
 	router.MaxMultipartMemory = MaxFileSizeMB
 
-	router.POST("/v1/face-encodings", getFaceEncodings)
+	router.POST("/v1/face-encodings", GetFaceEncodings)
 
 	router.Run("localhost:8001")
 }

@@ -6,11 +6,12 @@ type MessageResponse struct {
 
 type Encodings [][]float64
 
-type EncodingInfo struct {
-	fileName  string
+type EncodedFile struct {
+	name      string
+	sizeMB    float64
 	encodings Encodings
 }
 
-type EncodingResponse struct {
-	encodings []EncodingInfo
+type GetFaceEncodingsResponse struct {
+	encodings []EncodedFile
 }
