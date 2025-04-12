@@ -110,8 +110,7 @@ func GetFaceEncodings(ctx *gin.Context) {
 			}
 
 			fileField.Write(fileContents)
-
-			defer writer.Close()
+			writer.Close()
 
 			// log.Print("Request body: ", requestBody)
 
@@ -157,7 +156,7 @@ func GetFaceEncodings(ctx *gin.Context) {
 
 func main() {
 	router := gin.Default()
-	router.MaxMultipartMemory = MaxFileSizeMB
+	router.MaxMultipartMemory = MaxFileSizeMB * MaxConcurrency
 
 	router.POST("/v1/face-encodings", GetFaceEncodings)
 
