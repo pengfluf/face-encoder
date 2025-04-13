@@ -1,6 +1,6 @@
 import { getSingularOrPlural } from '@utils';
 
-const extensions = ['.jpg', '.jpeg', '.png', '.webp'];
+const extensions = ['.jpg', '.jpeg', '.png'];
 const formattedExtensions = getFormattedExtensions();
 const formattedTail = getSingularOrPlural({
   elementsAmount: extensions.length,
