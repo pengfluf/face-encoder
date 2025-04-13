@@ -8,14 +8,14 @@ import (
 )
 
 func RespondWithEncodings(ctx *gin.Context, encodings []EncodedFile) {
-	ctx.IndentedJSON(http.StatusOK, GetFaceEncodingsResponse{encodings})
+	ctx.JSON(http.StatusOK, encodings)
 }
 
 // Errors
 
 func RespondWithMessage(ctx *gin.Context, status int, message string) {
 	log.Print(message)
-	ctx.IndentedJSON(status, MessageResponse{message})
+	ctx.JSON(status, MessageResponse{message})
 }
 
 func RespondWithBadRequest(ctx *gin.Context, message string) {

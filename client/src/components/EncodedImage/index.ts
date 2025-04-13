@@ -1,0 +1,1 @@
+export { EncodedImage } from './EncodedImage';

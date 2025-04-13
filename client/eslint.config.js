@@ -105,7 +105,7 @@ const base = {
           ['^react', '^@?\\w'],
           // Internal packages.
           [
-            '^(@|@assets|@components|@constants|@store|@test|@types|@utils)(/.*|$)',
+            '^(@|@assets|@components|@constants|@store|@test|@customTypes|@utils)(/.*|$)',
           ],
           // Side effect imports.
           ['^\\u0000'],

@@ -1,8 +1,9 @@
 import {
   ActionResetState,
   ActionType,
-  ActionUpdateFilesSelection,
-  ActionUpdateImageEncodings,
+  ActionUpdateEncodedImages,
+  ActionUpdateFileCache,
+  ActionUpdateFileSelection,
   ActionUpdateIsUploading,
   ActionUpdateServerErrorMessage,
   State,
@@ -13,9 +14,13 @@ export function resetState(): ActionResetState {
 }
 
 export function updateFilesSelection(
-  value: State['filesSelection'],
-): ActionUpdateFilesSelection {
-  return { type: ActionType.UPDATE_FILES_SELECTION, value };
+  value: State['fileSelection'],
+): ActionUpdateFileSelection {
+  return { type: ActionType.UPDATE_FILE_SELECTION, value };
+}
+
+export function updateFileCache(): ActionUpdateFileCache {
+  return { type: ActionType.UPDATE_FILE_CACHE };
 }
 
 export function updateIsUploading(
@@ -24,10 +29,10 @@ export function updateIsUploading(
   return { type: ActionType.UPDATE_IS_UPLOADING, value };
 }
 
-export function updateImageEncodings(
-  value: State['imageEncodings'],
-): ActionUpdateImageEncodings {
-  return { type: ActionType.UPDATE_IMAGE_ENCODINGS, value };
+export function updateEncodedImages(
+  value: State['encodedImages'],
+): ActionUpdateEncodedImages {
+  return { type: ActionType.UPDATE_ENCODED_IMAGES, value };
 }
 
 export function updateErrorMessage(

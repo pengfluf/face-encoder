@@ -1,20 +1,19 @@
 import { JSX, memo } from 'react';
 
+import { Gapper } from '@components/styled';
 import { maxFilesAmount, maxFileSizeMB, minFilesAmount } from '@constants';
 import { imageExtensionsMessage } from '@constants/imageExtensions';
 
-import { Wrapper } from './styled';
-
 function InstructionComponent(): JSX.Element {
   return (
-    <Wrapper>
+    <Gapper $direction="column">
       <p>
-        Please select from {minFilesAmount} to {maxFilesAmount} images to
-        encode in {imageExtensionsMessage}.
+        Select from {minFilesAmount} to {maxFilesAmount} images to encode
+        in {imageExtensionsMessage}.
       </p>
 
       <p>Max. file size is {maxFileSizeMB} MB.</p>
-    </Wrapper>
+    </Gapper>
   );
 }
 

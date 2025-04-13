@@ -12,6 +12,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -120,7 +121,7 @@ func GetFaceEncodings(ctx *gin.Context) {
 				requestBody,
 			)
 
-			// log.Print("Encodings Response: ", encodingsResponse)
+			log.Print("Encodings Response: ", encodingsResponse)
 
 			if err != nil {
 				RespondWithBadGateway(
@@ -140,9 +141,8 @@ func GetFaceEncodings(ctx *gin.Context) {
 			// log.Print("Data: ", encodings)
 
 			encodedFiles = append(encodedFiles, EncodedFile{
-				name:      fileName,
-				sizeMB:    fileSizeMB,
-				encodings: encodings,
+				Name:      fileName,
+				Encodings: encodings,
 			})
 		}()
 	}
@@ -151,12 +151,18 @@ func GetFaceEncodings(ctx *gin.Context) {
 		limiter <- ""
 	}
 
+	log.Print("Encoded files", encodedFiles)
+
 	RespondWithEncodings(ctx, encodedFiles)
 }
 
 func main() {
 	router := gin.Default()
 	router.MaxMultipartMemory = MaxFileSizeMB * MaxConcurrency
+	router.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:5173"},
+		AllowMethods: []string{"POST"},
+	}))
 
 	router.POST("/v1/face-encodings", GetFaceEncodings)
 

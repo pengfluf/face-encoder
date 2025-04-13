@@ -3,23 +3,25 @@ import { useImmerReducer } from 'use-immer';
 
 import {
   Container,
+  EncodedImages,
+  FileSelectionErrors,
   Instruction,
   SvgIcon,
   SvgSprite,
   UploadForm,
 } from '@components';
-import { iconSize } from '@constants/styles';
+import { ErrorMessage, Gapper } from '@components/styled';
+import { SvgIconId } from '@components/SvgIcon/types';
+import { gap, iconSize } from '@constants/styles';
 import { initialState, reducer } from '@store';
-import { getSingularOrPlural } from '@utils';
 
 import { GlobalStyle } from './GlobalStyle';
-import { ContentWrapper, LogoAndTitle } from './styled';
 
 export function App(): JSX.Element {
-  const [{ filesSelection, errorMessage }, dispatch] = useImmerReducer(
-    reducer,
-    initialState,
-  );
+  const [
+    { fileSelection, fileCache, isUploading, errorMessage, encodedImages },
+    dispatch,
+  ] = useImmerReducer(reducer, initialState);
 
   return (
     <>
@@ -27,52 +29,30 @@ export function App(): JSX.Element {
       <GlobalStyle />
       <main>
         <Container>
-          <ContentWrapper>
-            <LogoAndTitle>
-              <SvgIcon icon="logo" size={iconSize.md} />
+          <Gapper $direction="column" $gap={gap.lg}>
+            <Gapper $alignItems="center">
+              <SvgIcon icon={SvgIconId.logo} size={iconSize.lg} />
               <h1>Face Encoder</h1>
-            </LogoAndTitle>
+            </Gapper>
 
             <Instruction />
 
-            <UploadForm
-              filesSelection={filesSelection}
-              dispatch={dispatch}
-            />
+            <Gapper $direction="column" $gap={gap.sm}>
+              {fileSelection.status && <p>{fileSelection.status}</p>}
 
-            {errorMessage && <p>{errorMessage}</p>}
+              <UploadForm
+                fileSelection={fileSelection}
+                isUploading={isUploading}
+                dispatch={dispatch}
+              />
+            </Gapper>
 
-            {!!filesSelection.files.length && (
-              <p>
-                Selected {filesSelection.files.length}{' '}
-                {getSingularOrPlural({
-                  elementsAmount: filesSelection.files.length,
-                  singularWord: 'file',
-                })}
-                .
-              </p>
-            )}
+            {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-            {!!filesSelection.validationErrors.length &&
-              filesSelection.validationErrors.map(
-                ({ reason, reasonMessage, files }) => {
-                  return (
-                    <div key={reason}>
-                      <p>{reasonMessage}:</p>
-                      <ul>
-                        {files.map(({ name, sizeFormatted }) => {
-                          return (
-                            <li key={name}>
-                              {name} ({sizeFormatted})
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
-                  );
-                },
-              )}
-          </ContentWrapper>
+            <FileSelectionErrors items={fileSelection.errors} />
+
+            <EncodedImages items={encodedImages} fileCache={fileCache} />
+          </Gapper>
         </Container>
       </main>
     </>

@@ -1,23 +1,32 @@
 ## Development
 
-### Start All
+### Run All
 
+Without Docker service:
 ```bash
+bash ./run-without-docker.sh
 ```
 
-### Dockerized Encoder
+With:
+```bash
+bash ./run-with-docker.sh
+```
+
+### Dockerized Encoder (localhost:8000)
 
 ```bash
 docker run veriffdocker/face-encoding-test-task:latest
 ```
 
-### Server
+### Server (localhost:8001)
+
+Recommended go version is 1.24.1
 
 ```bash
 cd server && go run .
 ```
 
-### Client
+### Client (localhost:5173)
 
 1. Run
 

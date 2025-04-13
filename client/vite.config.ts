@@ -14,7 +14,7 @@ export default defineConfig({
       '@constants': path.resolve(__dirname, './src/constants'),
       '@store': path.resolve(__dirname, './src/store'),
       '@test': path.resolve(__dirname, './src/test'),
-      '@types': path.resolve(__dirname, './src/types'),
+      '@customTypes': path.resolve(__dirname, './src/customTypes'),
       '@utils': path.resolve(__dirname, './src/utils'),
     },
   },

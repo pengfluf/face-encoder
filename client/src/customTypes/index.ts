@@ -1,3 +1,5 @@
+export type ValueOf<T> = T[keyof T];
+
 export type Entries<T> = {
   [K in keyof T]: [K, T[K]];
 }[keyof T][];
@@ -5,26 +7,31 @@ export type Entries<T> = {
 export interface FileInfo {
   name: string;
   sizeFormatted: string;
+  src: string;
 }
 
-export enum FileInvalidReason {
+export type FileCache = Record<string, FileInfo>;
+
+export enum FileErrorReason {
   'incorrectFormat' = 'incorrectFormat',
   'tooLarge' = 'tooLarge',
+  'duplicateName' = 'duplicateName',
 }
 
-interface FileValidationError {
-  reason: FileInvalidReason;
+export interface FileSelectionErrorInfo {
+  reason: FileErrorReason;
   reasonMessage: string;
   files: FileInfo[];
 }
 
-export interface FilesSelection {
+export interface FileSelectionInfo {
+  status: string;
   files: FileInfo[];
-  validationErrors: FileValidationError[];
+  errors: FileSelectionErrorInfo[];
   isReadyToUpload: boolean;
 }
 
-export interface ImageEncoding {
+export interface EncodedImageInfo {
   name: string;
   encodings: number[][];
 }
@@ -39,8 +46,4 @@ export enum EncodingType {
 
 export enum ElementId {
   inputFileUpload = 'inputFileUpload',
-}
-
-export enum IconId {
-  logo = 'logo',
 }

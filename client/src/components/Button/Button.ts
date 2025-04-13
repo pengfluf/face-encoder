@@ -1,17 +1,29 @@
-import styled from 'styled-components';
+import styled, { CSSProperties } from 'styled-components';
 
 import { colors } from '@constants/colors';
 import { borderRadius } from '@constants/styles';
 
-export const Button = styled.button`
+import { ButtonSize } from './types';
+
+interface Props {
+  size?: ButtonSize;
+}
+
+const padding: Record<ButtonSize, CSSProperties['padding']> = {
+  [ButtonSize.xs]: '4px 8px',
+  [ButtonSize.sm]: '8px 12px',
+  [ButtonSize.md]: '12px 16px',
+};
+
+export const Button = styled.button<Props>`
   display: inline-flex;
 
-  padding: 12px 16px;
+  padding: ${({ size }) => padding[size ?? ButtonSize.md]};
 
   border: 2px solid ${colors.black20};
   border-radius: ${borderRadius};
 
-  background-color: transparent;
+  background-color: ${colors.lightBeige};
 
   cursor: pointer;
 

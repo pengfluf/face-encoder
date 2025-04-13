@@ -1,5 +1,10 @@
 export { Button, ButtonAsInput } from './Button';
 export { Container } from './Container';
+export { EncodedImage } from './EncodedImage';
+export { EncodedImages } from './EncodedImages';
+export { EncodingsField } from './EncodingsField';
+export { FileSelectionError } from './FileSelectionError';
+export { FileSelectionErrors } from './FileSelectionErrors';
 export { Instruction } from './Instruction';
 export { SvgIcon } from './SvgIcon';
 export { SvgSprite } from './SvgSprite';

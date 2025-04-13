@@ -35,8 +35,8 @@
       "@store/*": ["./src/store/*"],
       "@test": ["./src/test/index"],
       "@test/*": ["./src/test/*"],
-      "@types": ["./src/types/index"],
-      "@types/*": ["./src/types/*"],
+      "@customTypes": ["./src/customTypes/index"],
+      "@customTypes/*": ["./src/customTypes/*"],
       "@utils": ["./src/utils/index"],
       "@utils/*": ["./src/utils/*"]
     }

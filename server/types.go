@@ -1,17 +1,14 @@
 package main
 
 type MessageResponse struct {
-	message string
+	Message string `json:"message"`
 }
 
 type Encodings [][]float64
 
 type EncodedFile struct {
-	name      string
-	sizeMB    float64
-	encodings Encodings
+	Name      string    `json:"name"`
+	Encodings Encodings `json:"encodings"`
 }
 
-type GetFaceEncodingsResponse struct {
-	encodings []EncodedFile
-}
+type GetFaceEncodingsResponse []EncodedFile

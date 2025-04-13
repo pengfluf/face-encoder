@@ -36,7 +36,7 @@ export default {
   clearMocks: true,
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
-    '!src/**/{constants,types}/**',
+    '!src/**/{constants,customTypes}/**',
     '!**/node_modules/**',
     '!**/dist/**',
   ],

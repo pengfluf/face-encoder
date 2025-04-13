@@ -1,49 +1,53 @@
-import { FormEvent, JSX, MouseEvent, useRef } from 'react';
+import { JSX, MouseEventHandler, useCallback, useRef } from 'react';
 
 import { Button, ButtonAsInput } from '@components/Button';
+import { Gapper } from '@components/styled';
+import { SvgIcon } from '@components/SvgIcon';
+import { SvgIconId } from '@components/SvgIcon/types';
 import { filesFieldName } from '@constants';
 import { API_ROUTES } from '@constants/api';
+import { AcceptType, ElementId, EncodingType } from '@customTypes';
 import { AppDispatch, State } from '@store/types';
-import { AcceptType, ElementId, EncodingType } from '@types';
 
-import { Wrapper } from './styled';
-import { useOnFilesSelection } from './useOnFilesSelection';
+import { useOnFilesSelection, useOnSubmit } from './utils';
+import { iconSize } from '@constants/styles';
 
 interface Props {
-  filesSelection: State['filesSelection'];
+  fileSelection: State['fileSelection'];
+  isUploading: State['isUploading'];
   dispatch: AppDispatch;
 }
 
 export function UploadForm({
-  filesSelection,
+  fileSelection,
+  isUploading,
   dispatch,
 }: Props): JSX.Element {
+  const { isReadyToUpload } = fileSelection;
+
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onFilesSelection = useOnFilesSelection({ dispatch });
+  const onSubmit = useOnSubmit({ isReadyToUpload, dispatch });
+  const onFilesSelection = useOnFilesSelection({
+    prevFiles: fileSelection.files,
+    dispatch,
+  });
 
-  function onButtonClick(event: MouseEvent<HTMLButtonElement>): void {
-    console.log(event.target);
+  const onButtonClick: MouseEventHandler<HTMLButtonElement> =
+    useCallback(() => {
+      if (!inputRef.current) return;
 
-    if (!inputRef.current) return;
-
-    inputRef.current.click();
-  }
-
-  function onSubmit(event: FormEvent): void {
-    event.preventDefault();
-
-    if (!filesSelection.isReadyToUpload) return;
-
-    console.log(event);
-  }
+      inputRef.current.click();
+    }, []);
 
   return (
-    <Wrapper
+    <Gapper
+      as="form"
       action={API_ROUTES.postFaceEncodings}
       method="post"
       encType={EncodingType.multipartFormData}
       onSubmit={onSubmit}
+      $alignItems="center"
     >
       <input
         id={ElementId.inputFileUpload}
@@ -56,16 +60,20 @@ export function UploadForm({
         style={{ display: 'none' }}
       />
 
-      <Button type="button" onClick={onButtonClick}>
+      <Button type="button" onClick={onButtonClick} disabled={isUploading}>
         Select files
       </Button>
 
       <ButtonAsInput
-        type="submit"
         role="button"
+        type="submit"
         value="Upload"
-        disabled={!filesSelection.isReadyToUpload}
+        disabled={!isReadyToUpload || isUploading}
       />
-    </Wrapper>
+
+      {isUploading && (
+        <SvgIcon icon={SvgIconId.spinner} size={iconSize.md} />
+      )}
+    </Gapper>
   );
 }

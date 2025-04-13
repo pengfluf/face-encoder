@@ -1,22 +1,30 @@
 import { Dispatch } from 'react';
 
-import { FilesSelection, ImageEncoding } from '@types';
+import {
+  EncodedImageInfo,
+  FileCache,
+  FileSelectionInfo,
+} from '@customTypes';
 
 export interface State {
-  filesSelection: FilesSelection;
+  fileSelection: FileSelectionInfo;
+  fileCache: FileCache;
+
   isUploading: boolean;
 
-  imageEncodings: ImageEncoding[];
+  encodedImages: EncodedImageInfo[];
   errorMessage: string;
 }
 
 export enum ActionType {
   RESET_STATE = 'RESET_STATE',
 
-  UPDATE_FILES_SELECTION = 'UPDATE_FILES_SELECTION',
+  UPDATE_FILE_SELECTION = 'UPDATE_FILE_SELECTION',
+  UPDATE_FILE_CACHE = 'UPDATE_FILE_CACHE',
+
   UPDATE_IS_UPLOADING = 'UPDATE_IS_UPLOADING',
 
-  UPDATE_IMAGE_ENCODINGS = 'UPDATE_IMAGE_ENCODINGS',
+  UPDATE_ENCODED_IMAGES = 'UPDATE_ENCODED_IMAGES',
   UPDATE_ERROR_MESSAGE = 'UPDATE_ERROR_MESSGE',
 }
 
@@ -24,9 +32,13 @@ export interface ActionResetState {
   type: ActionType.RESET_STATE;
 }
 
-export interface ActionUpdateFilesSelection {
-  type: ActionType.UPDATE_FILES_SELECTION;
-  value: State['filesSelection'];
+export interface ActionUpdateFileSelection {
+  type: ActionType.UPDATE_FILE_SELECTION;
+  value: State['fileSelection'];
+}
+
+export interface ActionUpdateFileCache {
+  type: ActionType.UPDATE_FILE_CACHE;
 }
 
 export interface ActionUpdateIsUploading {
@@ -34,9 +46,9 @@ export interface ActionUpdateIsUploading {
   value: State['isUploading'];
 }
 
-export interface ActionUpdateImageEncodings {
-  type: ActionType.UPDATE_IMAGE_ENCODINGS;
-  value: State['imageEncodings'];
+export interface ActionUpdateEncodedImages {
+  type: ActionType.UPDATE_ENCODED_IMAGES;
+  value: State['encodedImages'];
 }
 
 export interface ActionUpdateServerErrorMessage {
@@ -46,9 +58,10 @@ export interface ActionUpdateServerErrorMessage {
 
 export type Action =
   | ActionResetState
-  | ActionUpdateFilesSelection
+  | ActionUpdateFileSelection
+  | ActionUpdateFileCache
   | ActionUpdateIsUploading
-  | ActionUpdateImageEncodings
+  | ActionUpdateEncodedImages
   | ActionUpdateServerErrorMessage;
 
 export type AppDispatch = Dispatch<Action>;
