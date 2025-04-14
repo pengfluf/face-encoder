@@ -39,14 +39,14 @@ export function useOnFilesSelection({
         return;
       }
 
-      const { fileInfos, errors } = getValidationInfo({
+      const { selectedFiles, errors } = getValidationInfo({
         files,
       });
 
       dispatch(
         updateFilesSelection({
           status: selectionStatus,
-          files: fileInfos,
+          files: selectedFiles,
           errors,
           isReadyToUpload: errors.length === 0,
         }),

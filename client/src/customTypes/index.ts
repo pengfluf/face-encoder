@@ -4,13 +4,18 @@ export type Entries<T> = {
   [K in keyof T]: [K, T[K]];
 }[keyof T][];
 
-export interface FileInfo {
+export interface SelectedFile {
   name: string;
   sizeFormatted: string;
+  file: File;
+}
+
+export interface CachedFile {
+  name: string;
   src: string;
 }
 
-export type FileCache = Record<string, FileInfo>;
+export type FileCache = Record<string, CachedFile>;
 
 export enum FileErrorReason {
   'incorrectFormat' = 'incorrectFormat',
@@ -21,12 +26,12 @@ export enum FileErrorReason {
 export interface FileSelectionErrorInfo {
   reason: FileErrorReason;
   reasonMessage: string;
-  files: FileInfo[];
+  files: SelectedFile[];
 }
 
 export interface FileSelectionInfo {
   status: string;
-  files: FileInfo[];
+  files: SelectedFile[];
   errors: FileSelectionErrorInfo[];
   isReadyToUpload: boolean;
 }

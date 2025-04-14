@@ -42,12 +42,10 @@ func GetFaceEncodings(ctx *gin.Context) {
 		return
 	}
 
-	// waitGroup := sync.WaitGroup{}
 	encodedFiles := []EncodedFile{}
 	limiter := make(chan string, MaxConcurrency)
 
 	for _, fileHeader := range fileHeaders {
-		// waitGroup.Add(1)
 
 		limiter <- ""
 
@@ -87,8 +85,6 @@ func GetFaceEncodings(ctx *gin.Context) {
 				return
 			}
 
-			// log.Print("File is: ", file)
-
 			fileContents, err := io.ReadAll(file)
 
 			if err != nil {
@@ -100,7 +96,6 @@ func GetFaceEncodings(ctx *gin.Context) {
 
 			defer file.Close()
 
-			// bufferedReader := bufio.NewReader(file)
 			requestBody := &bytes.Buffer{}
 			writer := multipart.NewWriter(requestBody)
 			fileField, err := writer.CreateFormFile("file", fileName)
@@ -112,8 +107,6 @@ func GetFaceEncodings(ctx *gin.Context) {
 
 			fileField.Write(fileContents)
 			writer.Close()
-
-			// log.Print("Request body: ", requestBody)
 
 			encodingsResponse, err := http.Post(
 				"http://localhost:8000/v1/selfie",
@@ -137,8 +130,6 @@ func GetFaceEncodings(ctx *gin.Context) {
 			}
 
 			defer encodingsResponse.Body.Close()
-
-			// log.Print("Data: ", encodings)
 
 			encodedFiles = append(encodedFiles, EncodedFile{
 				Name:      fileName,

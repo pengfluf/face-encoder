@@ -1,7 +1,13 @@
-import { FileCache, FileInfo } from '@customTypes';
+import { FileCache, SelectedFile } from '@customTypes';
 
-export function createFileCache(files: FileInfo[]): FileCache {
-  return files.reduce((acc, info) => {
-    return { ...acc, [info.name]: info };
-  }, {});
+export function createFileCache(files: SelectedFile[]): FileCache {
+  return files.reduce((acc, { name, file }) => {
+    return {
+      ...acc,
+      [name]: {
+        name,
+        src: URL.createObjectURL(file),
+      },
+    };
+  }, {} as FileCache);
 }

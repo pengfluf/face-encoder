@@ -2,7 +2,9 @@ pre-commit:
   parallel: true
   commands:
     lint:
+      root: 'client'
       glob: '*.{ts,tsx}'
-      run: cd ./client && pnpm lint {staged_files}
+      run: pnpm lint {staged_files}
     test:
-      run: cd ./client && pnpm test
+      root: 'client'
+      run: pnpm test

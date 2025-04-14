@@ -1,14 +1,14 @@
 import { JSX } from 'react';
 
 import { EncodingsField } from '@components';
-import { FileInfo } from '@customTypes';
+import { CachedFile } from '@customTypes';
 import { FaceEncoding } from '@customTypes/api';
 
 import { Fields, Image, Wrapper } from './styled';
 
 interface Props {
   name: FaceEncoding['name'];
-  src: FileInfo['src'];
+  src: CachedFile['src'];
   encodings: FaceEncoding['encodings'];
 }
 

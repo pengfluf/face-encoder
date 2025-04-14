@@ -4,8 +4,8 @@ import { imageExtensions } from '@constants/imageExtensions';
 import {
   Entries,
   FileErrorReason,
-  FileInfo,
   FileSelectionInfo,
+  SelectedFile,
 } from '@customTypes';
 import { getFileExtension, getFormattedFileSize } from '@utils';
 
@@ -14,45 +14,45 @@ interface Payload {
 }
 
 interface Result {
-  fileInfos: FileSelectionInfo['files'];
+  selectedFiles: FileSelectionInfo['files'];
   errors: FileSelectionInfo['errors'];
 }
 
 export function getValidationInfo({ files }: Payload): Result {
   const fileNames = new Set<string>();
 
-  const fileInfos: FileSelectionInfo['files'] = [];
+  const selectedFiles: FileSelectionInfo['files'] = [];
 
   const errorsMap = (
     Object.keys(FileErrorReason) as Array<FileErrorReason>
   ).reduce(
     (acc, key) => ({ ...acc, [key]: [] }),
-    {} as Record<FileErrorReason, FileInfo[]>,
+    {} as Record<FileErrorReason, SelectedFile[]>,
   );
 
   for (const file of files) {
     const { name, size } = file;
 
-    const fileInfo: FileInfo = {
+    const selectedFile: SelectedFile = {
       name,
       sizeFormatted: getFormattedFileSize(size),
-      src: URL.createObjectURL(file),
+      file,
     };
 
-    fileInfos.push(fileInfo);
+    selectedFiles.push(selectedFile);
 
     if (size > maxFileSizeBytes) {
-      errorsMap.tooLarge.push(fileInfo);
+      errorsMap.tooLarge.push(selectedFile);
     }
 
     const fileExtension = getFileExtension(name);
 
     if (!imageExtensions.has(fileExtension)) {
-      errorsMap.incorrectFormat.push(fileInfo);
+      errorsMap.incorrectFormat.push(selectedFile);
     }
 
     if (fileNames.has(name)) {
-      errorsMap.duplicateName.push(fileInfo);
+      errorsMap.duplicateName.push(selectedFile);
     }
 
     fileNames.add(name);
@@ -60,17 +60,17 @@ export function getValidationInfo({ files }: Payload): Result {
 
   const errors = (
     Object.entries(errorsMap) as Entries<typeof errorsMap>
-  ).reduce((acc, [reason, fileInfos]) => {
-    if (fileInfos.length) {
+  ).reduce((acc, [reason, selectedFiles]) => {
+    if (selectedFiles.length) {
       acc.push({
         reason,
         reasonMessage: reasonErrorMessageMap[reason],
-        files: fileInfos,
+        files: selectedFiles,
       });
     }
 
     return acc;
   }, [] as FileSelectionInfo['errors']);
 
-  return { fileInfos, errors };
+  return { selectedFiles, errors };
 }
