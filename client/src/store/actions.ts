@@ -2,7 +2,6 @@ import {
   ActionStartUploading,
   ActionType,
   ActionUpdateEncodedImages,
-  ActionUpdateFileCache,
   ActionUpdateFileSelection,
   ActionUpdateIsUploading,
   ActionUpdateServerErrorMessage,
@@ -17,10 +16,6 @@ export function updateFilesSelection(
   value: State['fileSelection'],
 ): ActionUpdateFileSelection {
   return { type: ActionType.UPDATE_FILE_SELECTION, value };
-}
-
-export function updateFileCache(): ActionUpdateFileCache {
-  return { type: ActionType.UPDATE_FILE_CACHE };
 }
 
 export function updateIsUploading(

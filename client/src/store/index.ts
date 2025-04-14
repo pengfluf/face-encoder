@@ -26,10 +26,6 @@ export function reducer(draft: State, action: Action): void {
       draft.fileSelection = action.value;
       break;
 
-    case ActionType.UPDATE_FILE_CACHE:
-      draft.fileCache = createFileCache(draft.fileSelection.files);
-      break;
-
     case ActionType.UPDATE_IS_UPLOADING:
       draft.isUploading = action.value;
       break;

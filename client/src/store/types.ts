@@ -20,7 +20,6 @@ export enum ActionType {
   START_UPLOADING = 'START_UPLOADING',
 
   UPDATE_FILE_SELECTION = 'UPDATE_FILE_SELECTION',
-  UPDATE_FILE_CACHE = 'UPDATE_FILE_CACHE',
 
   UPDATE_IS_UPLOADING = 'UPDATE_IS_UPLOADING',
 
@@ -35,10 +34,6 @@ export interface ActionStartUploading {
 export interface ActionUpdateFileSelection {
   type: ActionType.UPDATE_FILE_SELECTION;
   value: State['fileSelection'];
-}
-
-export interface ActionUpdateFileCache {
-  type: ActionType.UPDATE_FILE_CACHE;
 }
 
 export interface ActionUpdateIsUploading {
@@ -59,7 +54,6 @@ export interface ActionUpdateServerErrorMessage {
 export type Action =
   | ActionStartUploading
   | ActionUpdateFileSelection
-  | ActionUpdateFileCache
   | ActionUpdateIsUploading
   | ActionUpdateEncodedImages
   | ActionUpdateServerErrorMessage;
