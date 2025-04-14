@@ -41,3 +41,4 @@ cd client && asdf install && pnpm i && pnpm dev
 - [asdf](https://asdf-vm.com/)
 - [pnpm](https://pnpm.io/)
 - [Vite](https://v4.vite.dev/)
+- [Lefthook](https://github.com/evilmartians/lefthook)
