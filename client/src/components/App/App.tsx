@@ -41,7 +41,8 @@ export function App(): JSX.Element {
               {fileSelection.status && <p>{fileSelection.status}</p>}
 
               <UploadForm
-                fileSelection={fileSelection}
+                isReadyToUpload={fileSelection.isReadyToUpload}
+                fileCache={fileCache}
                 isUploading={isUploading}
                 dispatch={dispatch}
               />

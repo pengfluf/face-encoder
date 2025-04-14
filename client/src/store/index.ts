@@ -13,10 +13,14 @@ export const initialState: State = {
   errorMessage: '',
 };
 
-export function reducer(draft: State, action: Action): State | undefined {
+export function reducer(draft: State, action: Action): void {
   switch (action.type) {
-    case ActionType.RESET_STATE:
-      return initialState;
+    case ActionType.START_UPLOADING:
+      draft.isUploading = true;
+      draft.encodedImages = [];
+      draft.errorMessage = '';
+      draft.fileCache = createFileCache(draft.fileSelection.files);
+      break;
 
     case ActionType.UPDATE_FILE_SELECTION:
       draft.fileSelection = action.value;

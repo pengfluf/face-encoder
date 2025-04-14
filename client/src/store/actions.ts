@@ -1,5 +1,5 @@
 import {
-  ActionResetState,
+  ActionStartUploading,
   ActionType,
   ActionUpdateEncodedImages,
   ActionUpdateFileCache,
@@ -9,8 +9,8 @@ import {
   State,
 } from './types';
 
-export function resetState(): ActionResetState {
-  return { type: ActionType.RESET_STATE };
+export function startUploading(): ActionStartUploading {
+  return { type: ActionType.START_UPLOADING };
 }
 
 export function updateFilesSelection(

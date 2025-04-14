@@ -1,71 +1,57 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, useCallback } from 'react';
 
 import { emptyFilesSelection, maxFilesAmount } from '@constants';
-import { FileSelectionInfo } from '@customTypes';
-import * as actions from '@store/actions';
+import { updateFilesSelection } from '@store/actions';
 import { AppDispatch } from '@store/types';
 
 import { getSelectionStatus } from './getSelectionStatus';
 import { getValidationInfo } from './getValidationInfo';
 
-function revokeObjectUrls(
-  prevFiles: FileSelectionInfo['files'],
-): Promise<void> {
-  return new Promise((resolve) => {
-    prevFiles.forEach(({ src }) => {
-      URL.revokeObjectURL(src);
-    });
-
-    resolve();
-  });
-}
-
 interface Payload {
-  prevFiles: FileSelectionInfo['files'];
   dispatch: AppDispatch;
 }
 
 export function useOnFilesSelection({
-  prevFiles,
   dispatch,
 }: Payload): ChangeEventHandler<HTMLInputElement> {
-  return (event) => {
-    void revokeObjectUrls(prevFiles);
+  return useCallback(
+    (event) => {
+      const { files } = event.target;
 
-    const { files } = event.target;
+      if (!files || !files.length) {
+        dispatch(updateFilesSelection(emptyFilesSelection));
 
-    if (!files || !files.length) {
-      dispatch(actions.updateFilesSelection(emptyFilesSelection));
+        return;
+      }
 
-      return;
-    }
+      const selectionStatus = getSelectionStatus({
+        filesAmount: files.length,
+      });
 
-    const selectionStatus = getSelectionStatus({
-      filesAmount: files.length,
-    });
+      if (files.length > maxFilesAmount) {
+        dispatch(
+          updateFilesSelection({
+            ...emptyFilesSelection,
+            status: selectionStatus,
+          }),
+        );
 
-    if (files.length > maxFilesAmount) {
+        return;
+      }
+
+      const { fileInfos, errors } = getValidationInfo({
+        files,
+      });
+
       dispatch(
-        actions.updateFilesSelection({
-          ...emptyFilesSelection,
+        updateFilesSelection({
           status: selectionStatus,
+          files: fileInfos,
+          errors,
+          isReadyToUpload: errors.length === 0,
         }),
       );
-
-      return;
-    }
-
-    const { fileInfos, errors } = getValidationInfo({
-      files,
-    });
-
-    dispatch(
-      actions.updateFilesSelection({
-        status: selectionStatus,
-        files: fileInfos,
-        errors,
-        isReadyToUpload: errors.length === 0,
-      }),
-    );
-  };
+    },
+    [dispatch],
+  );
 }

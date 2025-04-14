@@ -6,32 +6,29 @@ import { SvgIcon } from '@components/SvgIcon';
 import { SvgIconId } from '@components/SvgIcon/types';
 import { filesFieldName } from '@constants';
 import { API_ROUTES } from '@constants/api';
+import { iconSize } from '@constants/styles';
 import { AcceptType, ElementId, EncodingType } from '@customTypes';
 import { AppDispatch, State } from '@store/types';
 
 import { useOnFilesSelection, useOnSubmit } from './utils';
-import { iconSize } from '@constants/styles';
 
 interface Props {
-  fileSelection: State['fileSelection'];
+  isReadyToUpload: State['fileSelection']['isReadyToUpload'];
+  fileCache: State['fileCache'];
   isUploading: State['isUploading'];
   dispatch: AppDispatch;
 }
 
 export function UploadForm({
-  fileSelection,
+  isReadyToUpload,
+  fileCache,
   isUploading,
   dispatch,
 }: Props): JSX.Element {
-  const { isReadyToUpload } = fileSelection;
-
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const onSubmit = useOnSubmit({ isReadyToUpload, dispatch });
-  const onFilesSelection = useOnFilesSelection({
-    prevFiles: fileSelection.files,
-    dispatch,
-  });
+  const onSubmit = useOnSubmit({ isReadyToUpload, fileCache, dispatch });
+  const onFilesSelection = useOnFilesSelection({ dispatch });
 
   const onButtonClick: MouseEventHandler<HTMLButtonElement> =
     useCallback(() => {

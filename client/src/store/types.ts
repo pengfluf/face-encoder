@@ -17,7 +17,7 @@ export interface State {
 }
 
 export enum ActionType {
-  RESET_STATE = 'RESET_STATE',
+  START_UPLOADING = 'START_UPLOADING',
 
   UPDATE_FILE_SELECTION = 'UPDATE_FILE_SELECTION',
   UPDATE_FILE_CACHE = 'UPDATE_FILE_CACHE',
@@ -28,8 +28,8 @@ export enum ActionType {
   UPDATE_ERROR_MESSAGE = 'UPDATE_ERROR_MESSGE',
 }
 
-export interface ActionResetState {
-  type: ActionType.RESET_STATE;
+export interface ActionStartUploading {
+  type: ActionType.START_UPLOADING;
 }
 
 export interface ActionUpdateFileSelection {
@@ -57,7 +57,7 @@ export interface ActionUpdateServerErrorMessage {
 }
 
 export type Action =
-  | ActionResetState
+  | ActionStartUploading
   | ActionUpdateFileSelection
   | ActionUpdateFileCache
   | ActionUpdateIsUploading

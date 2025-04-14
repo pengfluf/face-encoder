@@ -36,7 +36,7 @@ cd client && asdf install && pnpm i && pnpm dev
 
 2. Open the app in a browser at `localhost:5173`
 
-## Tools
+#### Tools
 
 - [asdf](https://asdf-vm.com/)
 - [pnpm](https://pnpm.io/)
