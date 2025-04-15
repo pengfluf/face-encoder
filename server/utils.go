@@ -1,6 +1,8 @@
 package main
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"log"
 	"math"
 	"path/filepath"
@@ -22,4 +24,11 @@ func RoundFloat(value float64, precision uint) float64 {
 
 func BytesToMBs(value int64) float64 {
 	return RoundFloat(float64(value)/1024/1024, 1)
+}
+
+func GetMD5Hash(data []byte) string {
+	hasher := md5.New()
+	hasher.Write(data)
+
+	return hex.EncodeToString(hasher.Sum(nil))
 }
