@@ -7,8 +7,10 @@ function getRoute(route: string): string {
 
 enum ApiRoute {
   faceEncodings = 'face-encodings',
+  cachedFaceEncodings = 'cached-face-encodings',
 }
 
 export const API_ROUTES = {
-  postFaceEncodings: getRoute(ApiRoute.faceEncodings),
-};
+  faceEncodings: getRoute(ApiRoute.faceEncodings),
+  cachedFaceEncodings: getRoute(ApiRoute.cachedFaceEncodings),
+} as const;

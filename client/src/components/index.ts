@@ -1,3 +1,4 @@
+export { App } from './App';
 export { Button, ButtonAsInput } from './Button';
 export { Container } from './Container';
 export { EncodedImage } from './EncodedImage';
@@ -6,6 +7,7 @@ export { EncodingsField } from './EncodingsField';
 export { FileSelectionError } from './FileSelectionError';
 export { FileSelectionErrors } from './FileSelectionErrors';
 export { Instruction } from './Instruction';
+export { Navigation } from './Navigation';
 export { SvgIcon } from './SvgIcon';
 export { SvgSprite } from './SvgSprite';
 export { UploadForm } from './UploadForm';

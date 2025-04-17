@@ -35,11 +35,20 @@ h6 {
   -moz-osx-font-smoothing: grayscale;
 }
 
-main {
-  min-height: 100vh;
-  padding-block: ${screenPadding};
-
+body {
   background-color: ${colors.lightBeige};
+}
+
+header {
+  position: sticky;
+  top:0;
+  z-index: 1;
+
+  background-color: ${colors.lightBeige80};
+}
+
+main {
+  padding-block: ${screenPadding};
 }
 
 button,

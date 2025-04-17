@@ -21,22 +21,22 @@
     "esModuleInterop": true,
 
     "paths": {
+      "@api": ["./src/api/index"],
+      "@api/*": ["./src/api/*"],
       "@assets": ["./src/assets/index"],
       "@assets/*": ["./src/assets/*"],
       "@components": ["./src/components/index"],
       "@components/*": ["./src/components/*"],
       "@constants": ["./src/constants/index"],
       "@constants/*": ["./src/constants/*"],
-      "@context": ["./src/context/index"],
-      "@context/*": ["./src/context/*"],
-      "@pages": ["./src/pages/index"],
-      "@pages/*": ["./src/pages/*"],
       "@store": ["./src/store/index"],
       "@store/*": ["./src/store/*"],
       "@test": ["./src/test/index"],
       "@test/*": ["./src/test/*"],
       "@customTypes": ["./src/customTypes/index"],
       "@customTypes/*": ["./src/customTypes/*"],
+      "@pages": ["./src/pages/index"],
+      "@pages/*": ["./src/pages/*"],
       "@utils": ["./src/utils/index"],
       "@utils/*": ["./src/utils/*"]
     }

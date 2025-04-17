@@ -1,10 +1,13 @@
 import {
+  ActionStartFetchingCachedEncodings,
   ActionStartUploading,
   ActionType,
-  ActionUpdateEncodedImages,
+  ActionUpdateCachedEncodings,
+  ActionUpdateEncodings,
+  ActionUpdateErrorMessage,
   ActionUpdateFileSelection,
+  ActionUpdateIsFetching,
   ActionUpdateIsUploading,
-  ActionUpdateServerErrorMessage,
   State,
 } from './types';
 
@@ -12,10 +15,8 @@ export function startUploading(): ActionStartUploading {
   return { type: ActionType.START_UPLOADING };
 }
 
-export function updateFilesSelection(
-  value: State['fileSelection'],
-): ActionUpdateFileSelection {
-  return { type: ActionType.UPDATE_FILE_SELECTION, value };
+export function startFetchingCachedEncodings(): ActionStartFetchingCachedEncodings {
+  return { type: ActionType.START_FETCHING_CACHED_ENCODINGS };
 }
 
 export function updateIsUploading(
@@ -24,14 +25,32 @@ export function updateIsUploading(
   return { type: ActionType.UPDATE_IS_UPLOADING, value };
 }
 
-export function updateEncodedImages(
-  value: State['encodedImages'],
-): ActionUpdateEncodedImages {
-  return { type: ActionType.UPDATE_ENCODED_IMAGES, value };
+export function updateIsFetching(
+  value: State['isFetching'],
+): ActionUpdateIsFetching {
+  return { type: ActionType.UPDATE_IS_FETCHING, value };
+}
+
+export function updateFileSelection(
+  value: State['fileSelection'],
+): ActionUpdateFileSelection {
+  return { type: ActionType.UPDATE_FILE_SELECTION, value };
+}
+
+export function updateEncodings(
+  value: State['encodings'],
+): ActionUpdateEncodings {
+  return { type: ActionType.UPDATE_ENCODINGS, value };
+}
+
+export function updateCachedEncodings(
+  value: State['cachedEncodings'],
+): ActionUpdateCachedEncodings {
+  return { type: ActionType.UPDATE_CACHED_ENCODINGS, value };
 }
 
 export function updateErrorMessage(
   value: State['errorMessage'],
-): ActionUpdateServerErrorMessage {
+): ActionUpdateErrorMessage {
   return { type: ActionType.UPDATE_ERROR_MESSAGE, value };
 }

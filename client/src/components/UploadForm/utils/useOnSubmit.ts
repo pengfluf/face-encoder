@@ -1,23 +1,21 @@
 import { FormEventHandler } from 'react';
 
-import { API_ROUTES } from '@constants/api';
-import { FileCache } from '@customTypes';
-import {
-  PostFaceEncodingsResponse,
-  PostFaceMessageResponse,
-} from '@customTypes/api';
+import { postFaceEncodings } from '@api';
+import { CachedFileSelection } from '@customTypes';
 import {
   startUploading,
-  updateEncodedImages,
+  updateEncodings,
   updateErrorMessage,
   updateIsUploading,
 } from '@store/actions';
 import { AppDispatch } from '@store/types';
 import { getErrorMessage } from '@utils';
 
-function revokeObjectUrls(fileCache: FileCache): Promise<void> {
+function revokeObjectUrls(
+  cachedFileSelection: CachedFileSelection,
+): Promise<void> {
   return new Promise((resolve) => {
-    Object.values(fileCache).forEach(({ src }) => {
+    Object.values(cachedFileSelection).forEach(({ src }) => {
       URL.revokeObjectURL(src);
     });
 
@@ -27,13 +25,13 @@ function revokeObjectUrls(fileCache: FileCache): Promise<void> {
 
 interface Payload {
   isReadyToUpload: boolean;
-  fileCache: FileCache;
+  cachedFileSelection: CachedFileSelection;
   dispatch: AppDispatch;
 }
 
 export function useOnSubmit({
   isReadyToUpload,
-  fileCache,
+  cachedFileSelection,
   dispatch,
 }: Payload): FormEventHandler<HTMLFormElement> {
   return async (event) => {
@@ -43,28 +41,13 @@ export function useOnSubmit({
       if (!isReadyToUpload) return;
 
       dispatch(startUploading());
-      void revokeObjectUrls(fileCache);
+      void revokeObjectUrls(cachedFileSelection);
 
-      const method = 'POST';
-      const response = await fetch(API_ROUTES.postFaceEncodings, {
-        method,
-        body: new FormData(event.currentTarget),
-      });
+      const response = await postFaceEncodings(
+        new FormData(event.currentTarget),
+      );
 
-      if (!response.ok) {
-        const parsedResponse =
-          (await response.json()) as PostFaceMessageResponse;
-
-        throw new Error(
-          parsedResponse.message ??
-            `Unhandled ${method} ${API_ROUTES.postFaceEncodings} error of ${response.status} status.`,
-        );
-      }
-
-      const parsedResponse =
-        (await response.json()) as PostFaceEncodingsResponse;
-
-      dispatch(updateEncodedImages(parsedResponse));
+      dispatch(updateEncodings(response));
     } catch (error) {
       const errorMessage = getErrorMessage(error);
 

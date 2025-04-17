@@ -1,7 +1,7 @@
 import { ChangeEventHandler, useCallback } from 'react';
 
-import { emptyFilesSelection, maxFilesAmount } from '@constants';
-import { updateFilesSelection } from '@store/actions';
+import { emptyFileSelection, maxFilesAmount } from '@constants';
+import { updateFileSelection } from '@store/actions';
 import { AppDispatch } from '@store/types';
 
 import { getSelectionStatus } from './getSelectionStatus';
@@ -19,7 +19,7 @@ export function useOnFilesSelection({
       const { files } = event.target;
 
       if (!files || !files.length) {
-        dispatch(updateFilesSelection(emptyFilesSelection));
+        dispatch(updateFileSelection(emptyFileSelection));
 
         return;
       }
@@ -30,8 +30,8 @@ export function useOnFilesSelection({
 
       if (files.length > maxFilesAmount) {
         dispatch(
-          updateFilesSelection({
-            ...emptyFilesSelection,
+          updateFileSelection({
+            ...emptyFileSelection,
             status: selectionStatus,
           }),
         );
@@ -44,7 +44,7 @@ export function useOnFilesSelection({
       });
 
       dispatch(
-        updateFilesSelection({
+        updateFileSelection({
           status: selectionStatus,
           files: selectedFiles,
           errors,

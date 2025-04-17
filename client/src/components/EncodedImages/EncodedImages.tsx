@@ -1,25 +1,26 @@
 import { JSX } from 'react';
 
+import { CachedFaceEncoding, FaceEncoding } from '@api/types';
 import { EncodedImage } from '@components';
 import { Gapper } from '@components/styled';
 import { gap } from '@constants/styles';
-import { EncodedImageInfo, FileCache } from '@customTypes';
+import { CachedFileSelection } from '@customTypes';
 
 interface Props {
-  items: EncodedImageInfo[];
-  fileCache: FileCache;
+  items: FaceEncoding[] | CachedFaceEncoding[];
+  cachedFileSelection?: CachedFileSelection;
 }
 
 export function EncodedImages({
   items,
-  fileCache,
+  cachedFileSelection,
 }: Props): JSX.Element | null {
   if (!items.length) return null;
 
   return (
     <Gapper $direction="column" $gap={gap.xxl}>
       {items.map(({ name, encodings }) => {
-        const { src } = fileCache[name];
+        const { src } = cachedFileSelection?.[name] ?? {};
 
         return (
           <EncodedImage

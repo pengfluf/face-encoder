@@ -1,32 +1,34 @@
-import { JSX } from 'react';
+import { JSX, useMemo } from 'react';
+import { Outlet } from 'react-router';
 import { useImmerReducer } from 'use-immer';
 
-import {
-  Container,
-  EncodedImages,
-  FileSelectionErrors,
-  Instruction,
-  SvgIcon,
-  SvgSprite,
-  UploadForm,
-} from '@components';
+import { Container, Navigation, SvgIcon, SvgSprite } from '@components';
 import { ErrorMessage, Gapper } from '@components/styled';
 import { SvgIconId } from '@components/SvgIcon/types';
 import { gap, iconSize } from '@constants/styles';
+import { AppOutletContext } from '@customTypes';
 import { initialState, reducer } from '@store';
 
 import { GlobalStyle } from './GlobalStyle';
 
 export function App(): JSX.Element {
-  const [
-    { fileSelection, fileCache, isUploading, errorMessage, encodedImages },
-    dispatch,
-  ] = useImmerReducer(reducer, initialState);
+  const [state, dispatch] = useImmerReducer(reducer, initialState);
+  const { errorMessage } = state;
+
+  const outletContext: AppOutletContext = useMemo(
+    () => ({ state, dispatch }),
+    [state, dispatch],
+  );
 
   return (
     <>
       <SvgSprite />
       <GlobalStyle />
+
+      <header>
+        <Navigation />
+      </header>
+
       <main>
         <Container>
           <Gapper $direction="column" $gap={gap.lg}>
@@ -35,24 +37,9 @@ export function App(): JSX.Element {
               <h1>Face Encoder</h1>
             </Gapper>
 
-            <Instruction />
-
-            <Gapper $direction="column" $gap={gap.sm}>
-              {fileSelection.status && <p>{fileSelection.status}</p>}
-
-              <UploadForm
-                isReadyToUpload={fileSelection.isReadyToUpload}
-                fileCache={fileCache}
-                isUploading={isUploading}
-                dispatch={dispatch}
-              />
-            </Gapper>
-
             {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
-            <FileSelectionErrors items={fileSelection.errors} />
-
-            <EncodedImages items={encodedImages} fileCache={fileCache} />
+            <Outlet context={outletContext} />
           </Gapper>
         </Container>
       </main>

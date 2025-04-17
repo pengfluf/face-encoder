@@ -1,3 +1,7 @@
+import { CSSProperties } from 'styled-components';
+
+import { ButtonSize } from '@customTypes';
+
 export const container = {
   maxWidth: '1050px',
 };
@@ -19,3 +23,14 @@ export const iconSize = {
 
 export const screenPadding = gap.lg;
 export const borderRadius = '4px';
+
+export const transitionDuration = {
+  regular: '0.3s',
+};
+
+export const buttonPadding: Record<ButtonSize, CSSProperties['padding']> =
+  {
+    [ButtonSize.xs]: '4px 8px',
+    [ButtonSize.sm]: '8px 12px',
+    [ButtonSize.md]: '12px 16px',
+  };

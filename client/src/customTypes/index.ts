@@ -1,3 +1,5 @@
+import { AppDispatch, State } from '@store/types';
+
 export type ValueOf<T> = T[keyof T];
 
 export type Entries<T> = {
@@ -10,12 +12,12 @@ export interface SelectedFile {
   file: File;
 }
 
-export interface CachedFile {
+export interface CachedSelectionItem {
   name: string;
   src: string;
 }
 
-export type FileCache = Record<string, CachedFile>;
+export type CachedFileSelection = Record<string, CachedSelectionItem>;
 
 export enum FileErrorReason {
   'incorrectFormat' = 'incorrectFormat',
@@ -36,9 +38,9 @@ export interface FileSelectionInfo {
   isReadyToUpload: boolean;
 }
 
-export interface EncodedImageInfo {
-  name: string;
-  encodings: number[][];
+export interface AppOutletContext {
+  state: State;
+  dispatch: AppDispatch;
 }
 
 export enum AcceptType {
@@ -51,4 +53,10 @@ export enum EncodingType {
 
 export enum ElementId {
   inputFileUpload = 'inputFileUpload',
+}
+
+export enum ButtonSize {
+  xs = 'xs',
+  sm = 'sm',
+  md = 'md',
 }

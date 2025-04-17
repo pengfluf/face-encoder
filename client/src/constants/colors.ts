@@ -7,4 +7,5 @@ export const colors = {
   orangeDarker: 'rgb(196, 124, 17)',
 
   lightBeige: 'rgb(252, 244, 237)',
+  lightBeige80: 'rgba(252, 244, 237, 0.8)',
 };

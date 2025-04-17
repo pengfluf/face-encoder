@@ -1,9 +1,9 @@
 import { JSX, MouseEventHandler, useCallback, useState } from 'react';
 
 import { Button, SvgIcon } from '@components';
-import { ButtonSize } from '@components/Button/types';
 import { SvgIconId } from '@components/SvgIcon/types';
 import { iconSize } from '@constants/styles';
+import { ButtonSize } from '@customTypes';
 
 interface Props {
   className?: string;
