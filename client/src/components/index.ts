@@ -6,6 +6,7 @@ export { EncodedImages } from './EncodedImages';
 export { EncodingsField } from './EncodingsField';
 export { FileSelectionError } from './FileSelectionError';
 export { FileSelectionErrors } from './FileSelectionErrors';
+export { ImageOrPlaceholder } from './ImageOrPlaceholder';
 export { Instruction } from './Instruction';
 export { Navigation } from './Navigation';
 export { SvgIcon } from './SvgIcon';

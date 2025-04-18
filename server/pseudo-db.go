@@ -6,9 +6,9 @@ type CachedSelectionItem struct {
 }
 
 type PseudoDB struct {
-	CachedFiles map[string]CachedSelectionItem `json:"cachedFiles"`
+	CachedFiles map[string]*CachedSelectionItem `json:"cachedFiles"`
 }
 
 var DB = PseudoDB{
-	CachedFiles: make(map[string]CachedSelectionItem),
+	CachedFiles: make(map[string]*CachedSelectionItem),
 }

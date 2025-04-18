@@ -19,6 +19,7 @@ export const iconSize = {
   sm: '24px',
   md: '32px',
   lg: '48px',
+  xl: '64px',
 };
 
 export const screenPadding = gap.lg;

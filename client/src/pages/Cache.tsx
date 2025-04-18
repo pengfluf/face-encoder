@@ -11,7 +11,12 @@ import { getErrorMessage } from '@utils';
 
 export function Cache(): JSX.Element | null {
   const { state, dispatch } = useOutletContext<AppOutletContext>();
-  const { cachedEncodings, isFetching, errorMessage } = state;
+  const {
+    cachedEncodings,
+    isFetching,
+    errorMessage,
+    cachedFileSelection,
+  } = state;
 
   useEffect(() => {
     async function fetchData(): Promise<void> {
@@ -41,5 +46,10 @@ export function Cache(): JSX.Element | null {
     return <p>Cache is empty.</p>;
   }
 
-  return <EncodedImages items={cachedEncodings} />;
+  return (
+    <EncodedImages
+      items={cachedEncodings}
+      cachedFileSelection={cachedFileSelection}
+    />
+  );
 }

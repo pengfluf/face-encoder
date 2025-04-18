@@ -108,6 +108,8 @@ func GetFaceEncodings(ctx *gin.Context) {
 					IsFromCache: true,
 				})
 
+				cachedFile.Name = fileName
+
 				return
 			}
 
@@ -152,7 +154,7 @@ func GetFaceEncodings(ctx *gin.Context) {
 				IsFromCache: false,
 			})
 
-			DB.CachedFiles[md5Hash] = CachedSelectionItem{
+			DB.CachedFiles[md5Hash] = &CachedSelectionItem{
 				Name:      fileName,
 				Encodings: encodings,
 			}

@@ -8,7 +8,7 @@ import { CachedFileSelection } from '@customTypes';
 
 interface Props {
   items: FaceEncoding[] | CachedFaceEncoding[];
-  cachedFileSelection?: CachedFileSelection;
+  cachedFileSelection: CachedFileSelection;
 }
 
 export function EncodedImages({
@@ -20,7 +20,7 @@ export function EncodedImages({
   return (
     <Gapper $direction="column" $gap={gap.xxl}>
       {items.map(({ name, encodings }) => {
-        const { src } = cachedFileSelection?.[name] ?? {};
+        const { src } = cachedFileSelection[name] ?? {};
 
         return (
           <EncodedImage

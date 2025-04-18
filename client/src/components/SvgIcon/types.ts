@@ -1,5 +1,6 @@
 export enum SvgIconId {
   logo = 'logo',
+  monkey = 'monkey',
   spinner = 'spinner',
   copy = 'copy',
   checkmark = 'checkmark',

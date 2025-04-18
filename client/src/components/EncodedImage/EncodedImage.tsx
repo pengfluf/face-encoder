@@ -1,10 +1,10 @@
 import { JSX } from 'react';
 
 import { FaceEncoding } from '@api/types';
-import { EncodingsField } from '@components';
+import { EncodingsField, ImageOrPlaceholder } from '@components';
 import { CachedSelectionItem } from '@customTypes';
 
-import { Fields, Image, Wrapper } from './styled';
+import { Fields, Wrapper } from './styled';
 
 interface Props {
   name: FaceEncoding['name'];
@@ -19,7 +19,7 @@ export function EncodedImage({
 }: Props): JSX.Element {
   return (
     <Wrapper>
-      {src ? <Image alt={name} src={src} /> : <span>{name}</span>}
+      <ImageOrPlaceholder name={name} src={src} />
 
       <Fields>
         {encodings.map((group, index) => {
