@@ -5,7 +5,7 @@ function getRoute(route: string): string {
   return `${API_ORIGIN}/${API_VERSION}/${route}`;
 }
 
-enum ApiRoute {
+export enum ApiRoute {
   faceEncodings = 'face-encodings',
   cachedFaceEncodings = 'cached-face-encodings',
 }

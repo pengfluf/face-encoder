@@ -2,22 +2,10 @@ https://github.com/user-attachments/assets/167c6339-d63f-477a-9ca9-590d8cb40608
 
 ## Development
 
-### Run All
-
-Without Docker service:
-```bash
-bash ./run-without-docker.sh
-```
-
-With:
-```bash
-bash ./run-with-docker.sh
-```
-
-### Dockerized Encoder (localhost:8000)
+### Run
 
 ```bash
-docker run veriffdocker/face-encoding-test-task:latest
+bash ./run.sh
 ```
 
 ### Server (localhost:8001)
